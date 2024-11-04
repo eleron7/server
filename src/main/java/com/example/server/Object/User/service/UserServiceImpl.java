@@ -15,7 +15,6 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
 import java.beans.PropertyDescriptor;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,6 +64,23 @@ public class UserServiceImpl implements UserService{
             }
             //정상 삭제 여부 확인 후 반환
             return !userRepository.existsByUserId(targetUser.getUserId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Boolean userCheck(UserDto userDto) {
+        try {
+            //타겟 조회
+            User targetUser = userRepository.findByUserId(userDto.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException("User not found with : " + userDto.getUserId()));
+            //타겟 패스워드 검증 후 결과 반환
+            if (passwordEncoder.matches(userDto.getUserPwd(), targetUser.getUserPwd())) {
+                return Boolean.TRUE;
+            } else {
+                return Boolean.FALSE;
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

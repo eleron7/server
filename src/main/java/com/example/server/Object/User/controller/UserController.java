@@ -29,6 +29,11 @@ public class UserController {
         return ResponseEntity.ok().body(userService.deleteUser(userDto));
     }
 
+    @PostMapping("/userCheck")
+    public ResponseEntity<Boolean> userCheck(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok().body(userService.userCheck(userDto));
+    }
+
     @PostMapping("/updateUser")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
         return ResponseEntity.ok().body(userService.updateUser(userDto));
