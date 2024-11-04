@@ -21,13 +21,22 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	// MySQL 드라이버
 	implementation 'mysql:mysql-connector-java:8.0.30'
 
 	// Lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok:1.18.24'
+	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+	// Mapstruct
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final' // MapStruct 라이브러리
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final' // MapStruct 프로세서
+
+	// Lombok Mapstruct 연동
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
 
 	// 테스트 관련 의존성
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

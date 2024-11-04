@@ -1,8 +1,13 @@
 package com.example.server.Object.User.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.time.LocalDate;
 
@@ -11,6 +16,9 @@ import java.time.LocalDate;
 @Table(name="USER")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
+@Builder
+@NoArgsConstructor // 기본 생성자 추가
+@AllArgsConstructor // 빌더를 사용할 수 있도록 모든 필드 포함 생성자 추가
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +45,15 @@ public class User {
 
     @Column(name = "USER_PHONE_NUMBER", nullable = false, length = 50)
     private String userPhoneNumber;
+
+    public void passwordEncoding(PasswordEncoder passwordEncoder){
+        if (this.userPwd == null) {
+            throw new IllegalArgumentException("password cannot be null");
+        }
+        this.userPwd = passwordEncoder.encode(this.userPwd);
+    }
+
+    public void createUserCode(String userCode){
+        this.userCode = userCode;
+    }
 }

@@ -12,9 +12,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUserId(String userId);
     List<User> findAll();
 
-    @Query(value = "SELECT LPAD(CAST(COUNT(U.user_id) + 1 AS CHAR), 4, '0') " +
+    Boolean existsByUserId(String userId);
+
+    void deleteByUserId(String userId);
+
+    //yyMMdd + 금일 계정 생성한 인원 수 + 1로(4자리) 10자리 코드 생성
+    @Query(value = "SELECT CONCAT(DATE_FORMAT(NOW(), '%y%m%d'), LPAD(CAST(COUNT(U.user_id) + 1 AS CHAR), 4, '0')) AS USER_CODE " +
             "FROM USER U " +
-            "WHERE SUBSTRING(U.user_code, 1, 6) = :yyMMdd",
+            "WHERE SUBSTRING(U.user_code, 1, 6) = DATE_FORMAT(NOW(), '%y%m%d')",
             nativeQuery = true)
-    Optional<String> findUserNextCountByyMMdd(@Param("yyMMdd") String yyMMdd);
+    Optional<String> createUserCode();
+
 }
