@@ -1,5 +1,6 @@
 package com.example.server.Object.User.entity;
 
+import com.example.server.Object.Post.entity.Post;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -21,9 +21,6 @@ import java.time.LocalDate;
 @AllArgsConstructor // 빌더를 사용할 수 있도록 모든 필드 포함 생성자 추가
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "USER_CODE", nullable = false, length = 10, unique = true)
     private String userCode;
 
@@ -45,6 +42,9 @@ public class User {
 
     @Column(name = "USER_PHONE_NUMBER", nullable = false, length = 50)
     private String userPhoneNumber;
+
+    @OneToMany(mappedBy = "createUser")
+    private List<Post> posts;
 
     public void passwordEncoding(PasswordEncoder passwordEncoder){
         if (this.userPwd == null) {

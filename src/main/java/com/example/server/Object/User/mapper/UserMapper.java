@@ -9,7 +9,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = false))
 public interface UserMapper {
-    @Mapping(target = "id", ignore = true) // id 필드 매핑 무시
+
+    @Mapping(target = "posts", ignore = true) // Post 필드 매핑 무시
     User dtoToEntity (UserDto userDto);
 
     @Mapping(target = "userPwd", ignore = true) // Pwd 필드 매핑 무시
