@@ -8,8 +8,8 @@ import java.util.List;
 public interface PostService {
     PostDto createPost(List<MultipartFile> multipartFiles, PostDto postDto) throws IOException;
     Boolean deletePost(PostDto postDto);
-    PostDto updatePost(PostDto postDto);
-    PostDto findById(Long Id);
+    PostDto updatePost(List<MultipartFile> multipartFiles, PostDto postDto);
+    PostDto findById(Long id);
     List<PostDto> findAll();
     List<PostDto> findByContent(String keyword);
     List<PostDto> findByCreateUser(String userId);

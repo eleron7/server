@@ -31,4 +31,19 @@ public class PostController {
     public ResponseEntity<Boolean> deletePost(@RequestBody PostDto postDto) throws IOException {
         return ResponseEntity.ok().body(postService.deletePost(postDto));
     }
+
+    @PostMapping(value = "/updatePost", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<PostDto> updatePost(@RequestPart("post") PostDto postDto, @RequestPart("file") List<MultipartFile> multipartFiles) throws IOException {
+        return ResponseEntity.ok().body(postService.updatePost(multipartFiles, postDto));
+    }
+
+    @GetMapping(value = "/searchPost")
+    public ResponseEntity<List<PostDto>> searchPost() {
+        return ResponseEntity.ok().body(postService.findAll());
+    }
+
+    @GetMapping(value = "/searchPost/{id}")
+    public ResponseEntity<PostDto> searchPost(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(postService.findById(id));
+    }
 }

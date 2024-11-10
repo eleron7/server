@@ -33,7 +33,7 @@ public class Post {
     @JoinColumn(name = "CREATE_USER_ID", referencedColumnName = "USER_ID", nullable = false)
     private User createUser;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "POST_ID")
     List<PostFile> postFiles;
 

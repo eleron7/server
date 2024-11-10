@@ -6,15 +6,20 @@ import com.example.server.Object.Post.mapper.PostMapper;
 import com.example.server.Object.Post.repository.PostRepository;
 import com.example.server.Object.Post.trasfer.PostDto;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.beans.PropertyDescriptor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -75,18 +80,44 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public PostDto updatePost(PostDto postDto) {
-        return null;
+    @Transactional
+    public PostDto updatePost(List<MultipartFile> multipartFiles, PostDto postDto) {
+        try {
+            Post post = postRepository.findById(postDto.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Post not found with : " + postDto.getId()));
+            Post newPost = postMapper.dtoToEntity(postDto);
+
+            post.getPostFiles().clear();
+
+            for (MultipartFile multipartFile : multipartFiles) {
+                PostFile postFile = PostFile.builder().build();
+                postFile.saveFile(multipartFile, filePath);
+                post.getPostFiles().add(postFile);
+            }
+
+            BeanUtils.copyProperties(newPost, post, getNullPropertyNames(newPost));
+            postRepository.save(post);
+
+            return postMapper.entityToDto(postRepository.findById(post.getId())
+                    .orElseThrow(()-> new EntityNotFoundException("Failed to post update with : " + postDto.getId())));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public PostDto findById(Long Id) {
-        return null;
+    public PostDto findById(Long id) {
+        return postMapper.entityToDto(postRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Failed to post with : " + id)));
     }
 
     @Override
     public List<PostDto> findAll() {
-        return null;
+        List<PostDto> postDtoList = new ArrayList<>();
+        for (Post post : postRepository.findAll()) {
+            postDtoList.add(postMapper.entityToDto(post));
+        }
+        return postDtoList;
     }
 
     @Override
@@ -97,5 +128,13 @@ public class PostServiceImpl implements PostService{
     @Override
     public List<PostDto> findByCreateUser(String userId) {
         return null;
+    }
+
+    private String[] getNullPropertyNames(Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        return Stream.of(src.getPropertyDescriptors())
+                .map(PropertyDescriptor::getName)
+                .filter(name -> src.getPropertyValue(name) == null)
+                .toArray(String[]::new);
     }
 }
