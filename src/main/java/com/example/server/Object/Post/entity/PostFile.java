@@ -58,4 +58,8 @@ public class PostFile {
             throw new RuntimeException(e);
         }
     }
+
+    public void deleteFile() throws IOException {
+        Files.delete(this.savedFilePath.resolve(this.savedFileName));
+    }
 }

@@ -70,6 +70,9 @@ public class PostServiceImpl implements PostService{
                     .orElseThrow(() -> new EntityNotFoundException("Post not found with : " + postDto.getId()));
 
             if (post.getCreateUser().getUserId().equals(postDto.getCreateUserDto().getUserId())) {
+                for (PostFile postfile : post.getPostFiles()) {
+                    postfile.deleteFile();
+                }
                 postRepository.deleteById(post.getId());
             }
 
@@ -87,6 +90,9 @@ public class PostServiceImpl implements PostService{
                     .orElseThrow(() -> new EntityNotFoundException("Post not found with : " + postDto.getId()));
             Post newPost = postMapper.dtoToEntity(postDto);
 
+            for (PostFile postfile : post.getPostFiles()) {
+                postfile.deleteFile();
+            }
             post.getPostFiles().clear();
 
             for (MultipartFile multipartFile : multipartFiles) {

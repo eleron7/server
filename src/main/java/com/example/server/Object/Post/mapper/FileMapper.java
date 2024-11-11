@@ -9,6 +9,5 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = false))
 public interface FileMapper {
-    @Mapping(source = "orgFileName", target=  "fileName")
     FileDto entityToDto (PostFile postFile);
 }

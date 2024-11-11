@@ -1,4 +1,4 @@
-package com.example.server.security;
+package com.example.server.webConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +20,8 @@ public class WebSecurity {
                                 frameOptionsConfig.disable()
                         )
                 )
-                .authorizeHttpRequests((authorizeRequest) ->
-                        authorizeRequest.anyRequest().permitAll()
+                .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
+                        .anyRequest().permitAll()
                 );
 
         return http.build();

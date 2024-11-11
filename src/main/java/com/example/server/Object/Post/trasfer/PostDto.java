@@ -15,7 +15,7 @@ public class PostDto {
     private String title;
     private String content;
     private UserDto createUserDto;
-    private List<FileDto> postFilesDto;
+    private List<FileDto> fileDtos;
     private LocalDateTime createDateTime;
     private LocalDateTime updateDateTime;
 }

@@ -13,6 +13,6 @@ public interface PostMapper {
     Post dtoToEntity (PostDto postDto);
 
     @Mapping(source = "createUser", target = "createUserDto")
-    @Mapping(source = "postFiles", target = "postFilesDto")
+    @Mapping(source = "postFiles", target = "fileDtos")
     PostDto entityToDto (Post post);
 }
